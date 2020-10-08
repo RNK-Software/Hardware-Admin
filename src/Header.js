@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {
   CHeader,
@@ -11,6 +11,9 @@ import {
   CLink
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
+import { Button } from 'reactstrap'
+import * as firebase from './utilities/firebase';
+import { Redirect } from 'react-router-dom';
 
 const TheHeader = () => {
   const dispatch = useDispatch()
@@ -24,10 +27,18 @@ const TheHeader = () => {
   const toggleSidebarMobile = () => {
     const val = [false, 'responsive'].includes(sidebarShow) ? true : 'responsive'
     dispatch({type: 'set', sidebarShow: val})
+  };
+
+  const [redirect,setRedirect] = useState(null);
+
+  const handleLogout = () => {
+    firebase.auth.signOut();
+    setRedirect(<Redirect to="/login"/>)
   }
 
   return (
     <CHeader withSubheader>
+      {redirect}
       <CToggler
         inHeader
         className="ml-md-3 d-lg-none"
@@ -69,6 +80,7 @@ const TheHeader = () => {
             <CLink className="c-subheader-nav-link" href="#">
               <CIcon name="cil-settings" alt="Settings" />&nbsp;Settings
             </CLink>
+            <Button onClick={handleLogout}>Logout</Button>
           </div>
       </CSubheader>
     </CHeader>
