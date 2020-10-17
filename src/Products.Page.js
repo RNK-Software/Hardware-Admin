@@ -1,8 +1,9 @@
 import React from 'react';
+import AddForm from './Components/AddForm.Component';
 
 const ProducsPage = (props) => {
     return(
-        <text>Products screen</text>
+        <AddForm/>
     );
 };
 
