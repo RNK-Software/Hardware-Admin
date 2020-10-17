@@ -1,8 +1,7 @@
-import React,  { useState } from "react";
+import React, { useState } from "react";
 import { Container, Spinner, Row, Col, Alert, Button, Form, FormGroup, Label, Input } from 'reactstrap';
-import { connect } from 'react-redux';
 
-function AddForm(props) {     
+function AddForm() {     
     
     const [loading, setLoading] = useState(false);
     const [alert, setAlert] = useState(0);
@@ -47,8 +46,9 @@ function AddForm(props) {
         if(!error){
             const obj = {
                 name: name,
-                price: this.state.price,
-                description: this.state.description 
+                price: price,
+                description: description,
+                type: "Hardware" 
             };
             console.log(obj);
             setLoading(false);
