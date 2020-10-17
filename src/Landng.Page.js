@@ -1,10 +1,14 @@
 import React from "react";
-import { HashRouter, Switch } from "react-router-dom";
+import { HashRouter, Switch, Route } from "react-router-dom";
 import "./scss/style.scss";
 import "./App.css";
 import TheSideBar from "./SideBar";
 import TheHeader from "./Header";
-function Dashboard() {
+import ProducsPage from "./Products.Page";
+import Dashboard from './Dashboard.Page';
+
+
+const LandingPage = (props) => {
   return (
     <div className="App">
       <HashRouter>
@@ -14,6 +18,10 @@ function Dashboard() {
               <TheSideBar />
               <div className="c-wrapper">
                 <TheHeader />
+                <Switch>
+                  <Route path={props.match.url + '/'} exact component={Dashboard}/>
+                  <Route path={props.match.url + '/add'} component={ProducsPage}/>
+                </Switch>
                 <div className="c-body">{/* <TheContent/> */}</div>
                 {/* <TheFooter/> */}
               </div>
@@ -25,4 +33,4 @@ function Dashboard() {
   );
 }
 
-export default Dashboard;
+export default LandingPage;

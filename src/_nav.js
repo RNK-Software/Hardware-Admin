@@ -13,6 +13,16 @@ export default [
     }
   },
   {
+    _tag: 'CSidebarNavItem',
+    name: 'Manage Products',
+    to: '/dashboard/add',
+    icon: <CIcon name="cil-speedometer" customClasses="c-sidebar-nav-icon"/>,
+    badge: {
+      color: 'info',
+      text: 'NEW',
+    }
+  },
+  /*{
     _tag: 'CSidebarNavTitle',
     _children: ['Theme']
   },
@@ -306,5 +316,5 @@ export default [
   {
     _tag: 'CSidebarNavDivider',
     className: 'm-2'
-  }
+  }*/
 ]
