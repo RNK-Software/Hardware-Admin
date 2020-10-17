@@ -13,20 +13,18 @@ const LandingPage = (props) => {
     <div className="App">
       <HashRouter>
         <React.Suspense>
-          <Switch>
             <div className="c-app c-default-layout">
               <TheSideBar />
               <div className="c-wrapper">
                 <TheHeader />
                 <Switch>
-                  <Route path={props.match.url + '/'} exact component={Dashboard}/>
+                  <Route path={props.match.url} exact component={Dashboard}/>
                   <Route path={props.match.url + '/add'} component={ProducsPage}/>
                 </Switch>
                 <div className="c-body">{/* <TheContent/> */}</div>
                 {/* <TheFooter/> */}
               </div>
             </div>
-          </Switch>
         </React.Suspense>
       </HashRouter>
     </div>
