@@ -151,6 +151,7 @@ function AddForm() {
                                         <Button outline color="dark" type="submit" length="100" block>Add</Button>
                                     </Col>
                                 </Row>
+                                <br/><br/>
                             </Form>
                         </div>
                     </Col>

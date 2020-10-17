@@ -1,8 +1,9 @@
 import React from 'react';
+import Items from "./Components/Items.Component";
 
 const Dashboard = (props) => {
     return(
-        <text>dashboard screen</text>
+        <Items/>
     );
 };
 
