@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Container, Spinner, Row, Col, Alert, Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import ImageUploader from 'react-images-upload';
 
 function AddForm() {     
     
@@ -9,7 +10,8 @@ function AddForm() {
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
     const [price, setPrice] = useState("");
-    
+    const [pictures, setPictures] = useState([]);
+
     const validate = () => {
         let error = false;
         let alertMsg = "";
@@ -33,6 +35,10 @@ function AddForm() {
         return error;  
     }
 
+    const onDrop = (picture) => {
+        setPictures(picture);    
+    }
+
     const reset = (evt) => {
         evt.preventDefault();
         document.getElementById("form").reset();
@@ -48,7 +54,8 @@ function AddForm() {
                 name: name,
                 price: price,
                 description: description,
-                type: "Hardware" 
+                type: "Hardware",
+                picture: pictures 
             };
             console.log(obj);
             setLoading(false);
@@ -94,6 +101,22 @@ function AddForm() {
                                         </FormGroup>
                                     </Col>
                                 </Row>
+
+                                { pictures.length == 0 ?
+                                        <ImageUploader
+                                            withIcon={true}
+                                            buttonText='Choose a image'
+                                            onChange={onDrop}
+                                            imgExtension={['.jpg', '.gif', '.png', '.gif']}
+                                            maxFileSize={5242880}
+                                            label="Upload a Image here"
+                                        /> 
+                                    : 
+                                        null
+                                        //Image eka ganna danne naa eth araken enawa
+                                    }
+                                
+                                <br/>
                                 <Row xs="12" sm="12">
                                         <center>
                                             { loading ?
