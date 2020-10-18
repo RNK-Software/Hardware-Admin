@@ -6,7 +6,7 @@ import * as firebase from '../utilities/firebase';
 function Items() {
     const [products, setProducts] = useState([]);
     const [modal, setModal] = useState(false);
-    const [id, setId]  = useState('');
+    const [product, setProduct] = useState('');
 
     useEffect(() => {
         let data = [];
@@ -30,7 +30,7 @@ function Items() {
     const toggle = () => setModal(!modal);
 
     const onEdit = (id) => {
-        setId(id);
+        setProduct(products.find(product => product.id === id));
         toggle();
     }
 
@@ -39,8 +39,16 @@ function Items() {
             <Modal isOpen={modal} toggle={toggle}>
                 <ModalHeader toggle={toggle}>Modal title</ModalHeader>
                 <ModalBody>
-                    product id : {id}
-        </ModalBody>
+                    <text>{product.name}</text>
+                    <br/>
+                    <text>{product.description}</text>
+                    <br/>
+                    <text>{product.price}</text>
+                    <br/>
+                    <img src={product.pictureUrl} alt="image" style={{width: 200, height: 200}}/>
+
+                    
+                </ModalBody>
                 <ModalFooter>
                     <Button color="primary" onClick={toggle}>Do Something</Button>{' '}
                     <Button color="secondary" onClick={toggle}>Cancel</Button>
