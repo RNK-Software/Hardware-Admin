@@ -61,7 +61,8 @@ function AddForm() {
                             price: price,
                             description: description,
                             type: "Hardware",
-                            pictureUrl: url
+                            pictureUrl: url,
+                            pictureName: pic.name
                         };
                         firebase.firestore.collection('products').doc().set(obj).then(() => {
                             console.log("success");
