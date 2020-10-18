@@ -62,7 +62,7 @@ const TheHeader = () => {
         
       </CHeaderNav>
 
-      <CSubheader className="px-3 justify-content-between">
+      {/* <CSubheader className="px-3 justify-content-between">
           <div className="d-md-down-none mfe-2 c-subheader-nav">
             
             
@@ -82,7 +82,7 @@ const TheHeader = () => {
             </CLink>
             
           </div>
-      </CSubheader>
+      </CSubheader> */}
       
     </CHeader>
   )

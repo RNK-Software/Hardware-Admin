@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Container, Spinner, Row, Col, Alert, Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import ImageUploader from 'react-images-upload';
 import * as firebase from '../utilities/firebase';
+
 function AddForm() {
 
     const [loading, setLoading] = useState(false);
@@ -18,6 +19,10 @@ function AddForm() {
         if (name.length < 1) {
             error = true;
             alertMsg = "Name can not be empty";
+        }
+        if (picture.length == 0) {
+            error = true;
+            alertMsg = "You have to upload an image";
         }
         else if (price < 0) {
             error = true;
@@ -83,7 +88,6 @@ function AddForm() {
 
     return (
         <React.Fragment>
-
             <Container>
                 <Row>
                     <Col xs="12" sm="2">
@@ -133,7 +137,7 @@ function AddForm() {
                                 <Row xs="12" sm="12">
                                     <center>
                                         {loading ?
-                                            <Spinner animation="border" className="spinner2" alignItems="center" />
+                                            <Spinner animation="border" className="spinner2"/>
                                             : null}
                                     </center>
                                 </Row>

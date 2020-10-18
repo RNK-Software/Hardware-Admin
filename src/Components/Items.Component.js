@@ -2,13 +2,23 @@ import React, { useState, useEffect } from "react";
 import { Table, Button, Modal, ModalHeader, ModalBody, ModalFooter, Container, Spinner, Row, Col, Alert, Form, FormGroup, Label, Input } from 'reactstrap';
 import * as firebase from '../utilities/firebase';
 import ImageUploader from 'react-images-upload';
+import {
+    CHeader,
+    CToggler,
+    CHeaderBrand,
+    CHeaderNav,
+    CHeaderNavItem,
+    CHeaderNavLink,
+    CSubheader,
+    CLink
+  } from '@coreui/react';
 
 function Items() {
     const [products, setProducts] = useState([]);
     const [modal, setModal] = useState(false);
     const [modal2, setModal2] = useState(false);
     const [product, setProduct] = useState('');
-
+    const [searchString, setSearchString] = useState('');
     const [loading, setLoading] = useState(false);
     const [alert, setAlert] = useState(0);
     const [alertMsg, setAlertMsg] = useState("");
@@ -49,6 +59,27 @@ function Items() {
         console.log("delete fucntion");
         //delete firebase
     }
+
+    // const search = (evt) => {
+    //     evt.preventDefault();
+    //     console.log("search fucntion");
+    //     if(searchString !== ""){
+    //         let temp = products;
+    //         setProducts([]);
+    //         temp.forEach(doc => {
+    //             let items = doc.data();
+    //             items = JSON.stringify(items);
+    //             data.push({
+    //                 id: doc.id,
+    //                 name: doc.data().name,
+    //                 description: doc.data().description,
+    //                 price: doc.data().price,
+    //                 pictureUrl: doc.data().pictureUrl
+    //             });
+    //         });
+    //     }
+    //     //delete firebase
+    // }
 
     const Edit = (evt) => {
         console.log("edit fucntion");
@@ -122,8 +153,31 @@ function Items() {
         toggle();
     }
 
+    if (products.length == 0){
+        return(
+            <React.Fragment>
+                <div className="middle">
+                    <Spinner color="dark" style={{ width: '100', height: '100' }}/>
+                </div>
+            </React.Fragment>
+        )
+    }
+
     return (
+        
         <React.Fragment>
+            
+            <CSubheader>
+                
+                <Form className="form-inline">
+                    <Col style={{padding: '5px'}}></Col>
+                    <Input size="sm" placeholder="search here" onChange={e => setSearchString(e.target.value)}/>
+                    <Col style={{padding: '5px'}}></Col>
+                    
+                    
+                </Form>
+               
+            </CSubheader>
             <Modal isOpen={modal2} toggle={toggle2}>
                 <ModalHeader toggle={toggle2}>Are you sure?</ModalHeader>
                 <ModalBody>
@@ -218,13 +272,29 @@ function Items() {
             <Container>
                 <Table>
                     <tbody>
-                        {products.map(data => (
-                            <tr key={data.id}>
-                                <td xs="8" sm="8">{data.name}</td>
-
-                                <td align="right"><Button onClick={() => { onEdit(data.id) }}>Edit</Button></td>
-                            </tr>
-                        ))}
+                    {products.map((data, index) => {
+                            if(searchString === ""){
+                                return (
+                                    <tr key={data.id}>
+                                        <td xs="8" sm="8">{data.name}</td>
+                                        <td align="right"><Button onClick={() => { onEdit(data.id) }}>Edit</Button></td>
+                                    </tr>
+                                );
+                            }
+                            else{
+                                if(data.name.toLowerCase().includes(searchString.toLowerCase())){
+                                    return (
+                                        <tr key={data.id}>
+                                            <td xs="8" sm="8">{data.name}</td>
+                                            <td align="right"><Button onClick={() => { onEdit(data.id) }}>Edit</Button></td>
+                                        </tr>
+                                    );
+                                }
+                                else{
+                                    return null;
+                                }
+                            }  
+                        })}  
                     </tbody>
                 </Table>
             </Container>
