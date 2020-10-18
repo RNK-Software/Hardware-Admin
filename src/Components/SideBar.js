@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {
+  CLink,
   CCreateElement,
   CSidebar,
   CSidebarBrand,
@@ -59,7 +60,8 @@ const TheSidebar = () => {
             CSidebarNavTitle
           }}
         />
-      <Button onClick={handleLogout}>Logout</Button>
+        
+      <Button outline color="dark" onClick={handleLogout} block>Logout</Button>
       </CSidebarNav>
       <CSidebarMinimizer className="c-d-md-down-none"/>
     </CSidebar>

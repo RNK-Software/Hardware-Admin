@@ -91,7 +91,7 @@ function AddForm() {
                     <Col xs="12" sm="8">
                         <div className="center2">
                             <Form id="form" onSubmit={handleSubmit}>
-                                <br /><br />
+                                <br />
                                 <Row>
                                     <Col xs="12" sm="12">
                                         <FormGroup>

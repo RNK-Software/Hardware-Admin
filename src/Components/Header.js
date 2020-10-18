@@ -55,34 +55,35 @@ const TheHeader = () => {
 
       <CHeaderNav className="d-md-down-none mr-auto">
         <CHeaderNavItem className="px-3" >
-          <CHeaderNavLink to="/dashboard">Dashboard</CHeaderNavLink>
+          <CHeaderNavLink to="/dashboard">Name Hardware Store Admin Panel</CHeaderNavLink>
         </CHeaderNavItem>
-        <CHeaderNavItem  className="px-3">
-          <CHeaderNavLink to="/users">Users</CHeaderNavLink>
-        </CHeaderNavItem>
-        <CHeaderNavItem className="px-3">
-          <CHeaderNavLink>Settings</CHeaderNavLink>
-        </CHeaderNavItem>
+        
+        
+        
       </CHeaderNav>
 
       <CSubheader className="px-3 justify-content-between">
           <div className="d-md-down-none mfe-2 c-subheader-nav">
-            <CLink className="c-subheader-nav-link"href="#">
-              <CIcon name="cil-speech" alt="Settings" />
-            </CLink>
+            
+            
             <CLink 
               className="c-subheader-nav-link" 
               aria-current="page" 
               to="/dashboard"
             >
-              <CIcon name="cil-graph" alt="Dashboard" />&nbsp;Dashboard
+              <CIcon name="cil-graph" alt="Dashboard" />&nbsp;Product List
             </CLink>
-            <CLink className="c-subheader-nav-link" href="#">
-              <CIcon name="cil-settings" alt="Settings" />&nbsp;Settings
+            <CLink 
+              className="c-subheader-nav-link" 
+              aria-current="page" 
+              to="/dashboard/add"
+            >
+              <CIcon name="cil-graph" alt="Dashboard" />&nbsp;New Product
             </CLink>
-            <Button onClick={handleLogout}>Logout</Button>
+            
           </div>
       </CSubheader>
+      
     </CHeader>
   )
 }
