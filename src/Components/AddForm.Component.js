@@ -72,7 +72,7 @@ function AddForm() {
                         firebase.firestore.collection('products').doc().set(obj).then(() => {
                             console.log("success");
                             setLoading(false);
-
+                            reset();
                         }
                         ).catch(e => console.log(e));
                     })
@@ -86,6 +86,15 @@ function AddForm() {
         }
     }
 
+    if(loading){
+        return (
+            <React.Fragment>
+                <div className="middle">
+                    <Spinner color="dark" style={{ width: '100', height: '100' }}/>
+                </div>
+            </React.Fragment>
+        )
+    }
     return (
         <React.Fragment>
             <Container>
@@ -131,16 +140,6 @@ function AddForm() {
                                     maxFileSize={5242880}
                                     label="Upload a Image here"
                                 />
-
-
-                                <br />
-                                <Row xs="12" sm="12">
-                                    <center>
-                                        {loading ?
-                                            <Spinner animation="border" className="spinner2"/>
-                                            : null}
-                                    </center>
-                                </Row>
 
                                 {alert === 1 ?
                                     <Alert color="danger" status={alert}>
