@@ -13,11 +13,11 @@ import {
 } from '@coreui/react'
 
 import CIcon from '@coreui/icons-react'
-import * as firebase from './utilities/firebase';
+import * as firebase from '../utilities/firebase';
 import { Redirect } from 'react-router-dom';
 
 // sidebar nav config
-import navigation from './_nav'
+import navigation from '../_nav'
 import { Button } from 'reactstrap';
 
 const TheSidebar = () => {

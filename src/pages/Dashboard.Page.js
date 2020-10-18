@@ -1,5 +1,5 @@
 import React from 'react';
-import Items from "./Components/Items.Component";
+import Items from "../Components/Items.Component";
 
 const Dashboard = (props) => {
     return(

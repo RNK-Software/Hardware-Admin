@@ -12,7 +12,7 @@ import {
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { Button } from 'reactstrap'
-import * as firebase from './utilities/firebase';
+import * as firebase from '../utilities/firebase';
 import { Redirect } from 'react-router-dom';
 
 const TheHeader = () => {

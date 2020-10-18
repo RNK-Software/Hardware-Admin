@@ -1,9 +1,9 @@
 import React from "react";
 import { HashRouter, Switch, Route } from "react-router-dom";
-import "./scss/style.scss";
-import "./App.css";
-import TheSideBar from "./SideBar";
-import TheHeader from "./Header";
+import "../scss/style.scss";
+import "../App.css";
+import TheSideBar from "../Components/SideBar";
+import TheHeader from "../Components/Header";
 import ProducsPage from "./Products.Page";
 import Dashboard from './Dashboard.Page';
 

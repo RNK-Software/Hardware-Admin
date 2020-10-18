@@ -1,11 +1,8 @@
-import React, { Component, useContext, useState } from "react";
+import React, { useContext } from "react";
 import "./scss/style.scss";
 import "./App.css";
-import TheSideBar from "./SideBar";
-import TheHeader from "./Header";
-import Login from "./Login.Page";
-import Dashboard from "./Landng.Page";
-import * as firebase from "./utilities/firebase";
+import Login from "./pages/Login.Page";
+import Dashboard from "./pages/Landng.Page";
 import { AuthContext } from "./providers/authProvider";
 import { HashRouter, Switch, Route, Redirect } from "react-router-dom";
 

@@ -1,43 +1,62 @@
 import React, { useState, useEffect } from "react";
-import { Table,CardDeck, Card, CardImg, CardBody, CardTitle, CardSubtitle, CardText, Container, Spinner, Row, Col, Alert, Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import { Table, Container, Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
 import * as firebase from '../utilities/firebase';
 
-function Items() { 
+function Items() {
     const [products, setProducts] = useState([]);
-    useEffect(() => { 
-        let data = [];    
-        const db =  firebase.firestore;
-        db.settings({ timestampsInSnapshots: true});
-        db.collection('products').get().then((snapshot) => {    
+    const [modal, setModal] = useState(false);
+    const [id, setId]  = useState('');
+
+    useEffect(() => {
+        let data = [];
+        const db = firebase.firestore;
+        db.collection('products').get().then((snapshot) => {
             snapshot.docs.forEach(doc => {
                 let items = doc.data();
                 items = JSON.stringify(items);
                 data.push({
+                    id: doc.id,
                     name: doc.data().name,
                     description: doc.data().description,
                     price: doc.data().price,
                     pictureUrl: doc.data().pictureUrl
-                  });
+                });
             });
             setProducts(data);
-            console.log(products); 
-        }, []);        
-    });
+        });
+    }, []);
+
+    const toggle = () => setModal(!modal);
+
+    const onEdit = (id) => {
+        setId(id);
+        toggle();
+    }
 
     return (
         <React.Fragment>
+            <Modal isOpen={modal} toggle={toggle}>
+                <ModalHeader toggle={toggle}>Modal title</ModalHeader>
+                <ModalBody>
+                    product id : {id}
+        </ModalBody>
+                <ModalFooter>
+                    <Button color="primary" onClick={toggle}>Do Something</Button>{' '}
+                    <Button color="secondary" onClick={toggle}>Cancel</Button>
+                </ModalFooter>
+            </Modal>
             <Container>
                 <Table>
                     <tbody>
-                        { products.map(data => (
-                            <tr>
+                        {products.map(data => (
+                            <tr key={data.id}>
                                 <td xs="8" sm="8">{data.name}</td>
-    
-                                <td align ="right"><Button>Edit</Button></td>
-                            </tr>   
+
+                                <td align="right"><Button onClick={() => { onEdit(data.id) }}>Edit</Button></td>
+                            </tr>
                         ))}
-                    </tbody>  
+                    </tbody>
                 </Table>
             </Container>
         </React.Fragment>

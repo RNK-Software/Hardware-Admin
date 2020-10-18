@@ -12,7 +12,7 @@ import {
   Input,
 } from "reactstrap";
 
-import * as firebase from "./utilities/firebase";
+import * as firebase from "../utilities/firebase";
 
 export default class Login extends Component {
   constructor(props) {
