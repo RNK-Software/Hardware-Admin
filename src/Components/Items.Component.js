@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Table, Button, Modal, ModalHeader, ModalBody, ModalFooter, Container, Spinner, Row, Col, Alert, Form, FormGroup, Label, Input } from 'reactstrap';
+import { Table, Button, Modal, ModalHeader, ModalBody, ModalFooter, Container, Spinner, Row, Col, Alert, Form, FormGroup, Label, Input, Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 import * as firebase from '../utilities/firebase';
 import ImageUploader from 'react-images-upload';
 import {
@@ -11,7 +11,7 @@ import {
     CHeaderNavLink,
     CSubheader,
     CLink
-  } from '@coreui/react';
+} from '@coreui/react';
 
 function Items() {
     const [products, setProducts] = useState([]);
@@ -26,6 +26,15 @@ function Items() {
     const [description, setDescription] = useState("");
     const [price, setPrice] = useState("");
     const [picture, setPicture] = useState([]);
+    //for pagination
+    const [firstItem, setFirstItem] = useState(null);
+    const [lastItem, setLastItem] = useState(null);
+    const [disableForward, setDisableForward] = useState(false);
+    const [disableBackward, setDisableBackward] = useState(false);
+    //
+    //Let the user set this if you want 
+    //
+    const itemsPerPage = 20;
 
     const validate = () => {
         let error = false;
@@ -92,7 +101,7 @@ function Items() {
         setAlert(0);
         if (!error) {
             //Update firebase
-            
+
             // picture.map((pic) => {
             //     var ref = firebase.storage.ref('products/' + pic.name);
             //     ref.put(pic).then((res) => {
@@ -126,10 +135,10 @@ function Items() {
         setDescription(product.description);
         setPrice(product.price);
         setPicture(product.picture);
-        
+
         let data = [];
         const db = firebase.firestore;
-        db.collection('products').get().then((snapshot) => {
+        db.collection('products').orderBy('name').limit(itemsPerPage).get().then((snapshot) => {
             snapshot.docs.forEach(doc => {
                 let items = doc.data();
                 items = JSON.stringify(items);
@@ -141,9 +150,82 @@ function Items() {
                     pictureUrl: doc.data().pictureUrl
                 });
             });
-            setProducts(data);
+            if (snapshot.docs.length > 0) {
+                setFirstItem(snapshot.docs[0]);
+                setLastItem(snapshot.docs[snapshot.docs.length - 1]);
+                setProducts(data);
+
+            }
         });
     }, [product]);
+
+    const togglePaginationForward = () => {
+        if (!lastItem) {
+            return;
+        }
+        if(disableBackward)
+            setDisableBackward(false);
+        let data = [];
+        const db = firebase.firestore;
+        db.collection('products').orderBy('name').startAfter(lastItem).limit(itemsPerPage).get().then((snapshot) => {
+            if (snapshot.docs.length === 0) {
+                setDisableForward(true);
+                return;
+            }
+            snapshot.docs.forEach(doc => {
+                let items = doc.data();
+                items = JSON.stringify(items);
+                data.push({
+                    id: doc.id,
+                    name: doc.data().name,
+                    description: doc.data().description,
+                    price: doc.data().price,
+                    pictureUrl: doc.data().pictureUrl
+                });
+            });
+
+         
+                setFirstItem(snapshot.docs[0]);
+                setLastItem(snapshot.docs[snapshot.docs.length - 1]);
+                setProducts(data);
+            
+
+        });
+    };
+
+    const togglePaginationBackward = () => {
+        if (!firstItem) {
+            return;
+        }
+        if(disableForward)
+            setDisableForward(false);
+        let data = [];
+        const db = firebase.firestore;
+        db.collection('products').orderBy('name').endBefore(firstItem).limit(itemsPerPage).get().then((snapshot) => {
+            if (snapshot.docs.length === 0) {
+                setDisableBackward(true);
+                return;
+            }
+            snapshot.docs.forEach(doc => {
+                let items = doc.data();
+                items = JSON.stringify(items);
+                data.push({
+                    id: doc.id,
+                    name: doc.data().name,
+                    description: doc.data().description,
+                    price: doc.data().price,
+                    pictureUrl: doc.data().pictureUrl
+                });
+            });
+            console.log(data);
+
+            setFirstItem(snapshot.docs[0]);
+            setLastItem(snapshot.docs[snapshot.docs.length - 1]);
+            setProducts(data);
+
+
+        });
+    }
 
     const toggle = () => setModal(!modal);
     const toggle2 = () => setModal2(!modal2);
@@ -153,39 +235,39 @@ function Items() {
         toggle();
     }
 
-    if (products.length == 0){
-        return(
+    /*if (products.length == 0) {
+        return (
             <React.Fragment>
                 <div className="middle">
-                    <Spinner color="dark" style={{ width: '100', height: '100' }}/>
+                    <Spinner color="dark" style={{ width: '100', height: '100' }} />
                 </div>
             </React.Fragment>
         )
-    }
+    }*/
 
     return (
-        
+
         <React.Fragment>
-            
+
             <CSubheader>
-                
+
                 <Form className="form-inline">
-                    <Col style={{padding: '5px'}}></Col>
-                    <Input size="sm" placeholder="search here" onChange={e => setSearchString(e.target.value)}/>
-                    <Col style={{padding: '5px'}}></Col>
-                    
-                    
+                    <Col style={{ padding: '5px' }}></Col>
+                    <Input size="sm" placeholder="search here" onChange={e => setSearchString(e.target.value)} />
+                    <Col style={{ padding: '5px' }}></Col>
+
+
                 </Form>
-               
+
             </CSubheader>
             <Modal isOpen={modal2} toggle={toggle2}>
                 <ModalHeader toggle={toggle2}>Are you sure?</ModalHeader>
                 <ModalBody>
-                                      
+
                 </ModalBody>
                 <ModalFooter>
                     <Button outline color="danger" onClick={onDelete} block>Yes</Button>
-                    
+
                     <Button outline color="dark" onClick={toggle2} block>Cancel</Button>
                 </ModalFooter>
             </Modal>
@@ -194,74 +276,74 @@ function Items() {
             <Modal isOpen={modal} toggle={toggle} size="lg">
                 <ModalHeader toggle={toggle}>Edit your product here</ModalHeader>
                 <ModalBody>
-                    <center><img src={product.pictureUrl} alt="image" style={{width: 200, height: 200}}/></center>
-                            <Row>
-                                <Col xs="12" sm="2">
-                                </Col>
-                                <Col xs="12" sm="8">
-                                    <div className="center2">
-                                        <Form id="form" > 
-                                            <Row>
-                                                <Col xs="12" sm="12">
-                                                    <FormGroup>
-                                                        <Label for="name">ITEM NAME</Label>
-                                                        <Input type="text" name="name" id="name" value={name} onChange={e => setName(e.target.value)} />
-                                                    </FormGroup>
-                                                </Col>
-                                            </Row>
-                                            <Row>
-                                                <Col xs="12" sm="12">
-                                                    <FormGroup>
-                                                        <Label for="name">ITEM DESCRIPTION</Label>
-                                                        <Input type="textarea" style={{ height: 150 }} name="name" value={description} id="name" placeholder="Input the item description here" onChange={e => setDescription(e.target.value)} />
-                                                    </FormGroup>
-                                                </Col>
-                                            </Row>
-                                            <Row>
-                                                <Col xs="12" sm="12">
-                                                    <FormGroup>
-                                                        <Label for="name">PRICE</Label>
-                                                        <Input type="number" name="name" id="name" value={price}  placeholder="Input the price here" onChange={e => setPrice(e.target.value)} />
-                                                    </FormGroup>
-                                                </Col>
-                                            </Row>
-                                            <ImageUploader
-                                                withIcon={true}
-                                                withPreview={true}
-                                                buttonText='Choose a image'
-                                                onChange={onDrop}
-                                                imgExtension={['.jpg', '.gif', '.png', '.gif']}
-                                                maxFileSize={5242880}
-                                                label="Upload a Image here"
-                                            />
-                                            <br />
-                                            <Row xs="12" sm="12">
-                                                <center>
-                                                    {loading ?
-                                                        <Spinner animation="border" className="spinner2" alignItems="center" />
-                                                        : null}
-                                                </center>
-                                            </Row>
-                                            {alert === 1 ?
-                                                <Alert color="danger" status={alert}>
-                                                    {alertMsg}
-                                                </Alert>
+                    <center><img src={product.pictureUrl} alt="image" style={{ width: 200, height: 200 }} /></center>
+                    <Row>
+                        <Col xs="12" sm="2">
+                        </Col>
+                        <Col xs="12" sm="8">
+                            <div className="center2">
+                                <Form id="form" >
+                                    <Row>
+                                        <Col xs="12" sm="12">
+                                            <FormGroup>
+                                                <Label for="name">ITEM NAME</Label>
+                                                <Input type="text" name="name" id="name" value={name} onChange={e => setName(e.target.value)} />
+                                            </FormGroup>
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col xs="12" sm="12">
+                                            <FormGroup>
+                                                <Label for="name">ITEM DESCRIPTION</Label>
+                                                <Input type="textarea" style={{ height: 150 }} name="name" value={description} id="name" placeholder="Input the item description here" onChange={e => setDescription(e.target.value)} />
+                                            </FormGroup>
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col xs="12" sm="12">
+                                            <FormGroup>
+                                                <Label for="name">PRICE</Label>
+                                                <Input type="number" name="name" id="name" value={price} placeholder="Input the price here" onChange={e => setPrice(e.target.value)} />
+                                            </FormGroup>
+                                        </Col>
+                                    </Row>
+                                    <ImageUploader
+                                        withIcon={true}
+                                        withPreview={true}
+                                        buttonText='Choose a image'
+                                        onChange={onDrop}
+                                        imgExtension={['.jpg', '.gif', '.png', '.gif']}
+                                        maxFileSize={5242880}
+                                        label="Upload a Image here"
+                                    />
+                                    <br />
+                                    <Row xs="12" sm="12">
+                                        <center>
+                                            {loading ?
+                                                <Spinner animation="border" className="spinner2" alignItems="center" />
                                                 : null}
-                                            <Row>
-                                                <Col xs="6" sm="6">
-                                                    
-                                                </Col>
-                                                <Col xs="6" sm="6">
-                                                    
-                                                </Col>
-                                            </Row>
-                                            <br/><br/>
-                                        </Form>
-                                    </div>
-                                </Col>
-                                <Col xs="12" sm="2">
-                                </Col>
-                            </Row>                   
+                                        </center>
+                                    </Row>
+                                    {alert === 1 ?
+                                        <Alert color="danger" status={alert}>
+                                            {alertMsg}
+                                        </Alert>
+                                        : null}
+                                    <Row>
+                                        <Col xs="6" sm="6">
+
+                                        </Col>
+                                        <Col xs="6" sm="6">
+
+                                        </Col>
+                                    </Row>
+                                    <br /><br />
+                                </Form>
+                            </div>
+                        </Col>
+                        <Col xs="12" sm="2">
+                        </Col>
+                    </Row>
                 </ModalBody>
                 <ModalFooter>
                     <Button outline color="danger" onClick={toggle2} block>Delete</Button>
@@ -270,10 +352,18 @@ function Items() {
                 </ModalFooter>
             </Modal>
             <Container>
+                <Pagination aria-label="Page navigation example">
+                    <PaginationItem disabled={disableBackward}>
+                        <PaginationLink onClick={togglePaginationBackward} previous />
+                    </PaginationItem>
+                    <PaginationItem disabled={disableForward}>
+                        <PaginationLink onClick={togglePaginationForward} next />
+                    </PaginationItem>
+                </Pagination>
                 <Table>
                     <tbody>
-                    {products.map((data, index) => {
-                            if(searchString === ""){
+                        {products.map((data, index) => {
+                            if (searchString === "") {
                                 return (
                                     <tr key={data.id}>
                                         <td xs="8" sm="8">{data.name}</td>
@@ -281,8 +371,8 @@ function Items() {
                                     </tr>
                                 );
                             }
-                            else{
-                                if(data.name.toLowerCase().includes(searchString.toLowerCase())){
+                            else {
+                                if (data.name.toLowerCase().includes(searchString.toLowerCase())) {
                                     return (
                                         <tr key={data.id}>
                                             <td xs="8" sm="8">{data.name}</td>
@@ -290,11 +380,11 @@ function Items() {
                                         </tr>
                                     );
                                 }
-                                else{
+                                else {
                                     return null;
                                 }
-                            }  
-                        })}  
+                            }
+                        })}
                     </tbody>
                 </Table>
             </Container>
