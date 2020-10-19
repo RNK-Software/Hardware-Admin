@@ -157,7 +157,7 @@ function Items() {
 
             }
         });
-    }, [product]);
+    }, [product, itemsPerPage]);
 
     const togglePaginationForward = () => {
         if (!lastItem) {
