@@ -3,7 +3,10 @@ import Items from "../Components/Items.Component";
 
 const Dashboard = (props) => {
     return(
-        <Items/>
+        <React.Fragment>
+            <Items/>
+        </React.Fragment>
+        
     );
 };
 

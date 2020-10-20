@@ -34,7 +34,7 @@ function Items() {
     const [disableForward, setDisableForward] = useState(false);
     const [disableBackward, setDisableBackward] = useState(false);
     //Let the user set this if you want 
-    const [itemsPerPage, setItemsPerPage] = useState(20);
+    const [itemsPerPage, setItemsPerPage] = useState(5);
     //for searching
     const [allProducts, setAllProducts] = useState(null);
 
@@ -304,25 +304,42 @@ function Items() {
 
         <React.Fragment>
             <CSubheader>
+                
                 <Form className="form-inline">
+                    <Row>
+                        <Pagination >
+                            
+                            <Col style={{ padding: '5px' }}></Col>
+                                <PaginationItem disabled={disableBackward}>
+                                    <PaginationLink onClick={togglePaginationBackward} previous />
+                                </PaginationItem>
+                                <Input type="select" name="select" id="exampleSelect" onChange={e => setItemsPerPage(parseInt(e.target.value))}>
+                                    <option>5</option>
+                                    <option>10</option>
+                                    <option>20</option>
+                                    <option>30</option>
+                                    <option>50</option>
+                                </Input>
+                                <PaginationItem disabled={disableForward}>
+                                    <PaginationLink onClick={togglePaginationForward} next />
+                                </PaginationItem> 
+                            </Pagination>
+                        <Col style={{ padding: '15px' }}></Col>
+                    </Row>
+
                     <Col style={{ padding: '5px' }}></Col>
                     <Input size="sm" placeholder="search here" onChange={e => setSearchString(e.target.value)} />
                     <Col style={{ padding: '5px' }}></Col>
                     <Col style={{ padding: '5px' }}></Col>
-                    <Button onClick={onSearch}>Search</Button>
-                    <Col style={{ padding: '5px' }}></Col>
+                    <Button size="sm" onClick={onSearch}>Search</Button>
+                    <Col style={{ padding: '10px' }}></Col>
+                  
+               
                 </Form>
-
-                <Pagination aria-label="Page navigation example">
-                    <PaginationItem disabled={disableBackward}>
-                        <PaginationLink onClick={togglePaginationBackward} previous />
-                    </PaginationItem>
-                    <PaginationItem disabled={disableForward}>
-                        <PaginationLink onClick={togglePaginationForward} next />
-                    </PaginationItem>
-                </Pagination>
+               
+                
             </CSubheader>
-
+            
             <Modal isOpen={modal2} toggle={toggle2}>
                 <ModalHeader toggle={toggle2}>Are you sure?</ModalHeader>
 
@@ -450,6 +467,7 @@ function Items() {
                     </tbody>
                 </Table>
             </Container>
+            
         </React.Fragment>
     );
 }

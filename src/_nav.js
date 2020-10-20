@@ -9,7 +9,7 @@ export default [
     _tag: 'CSidebarNavItem',
     name: 'Product List',
     to: '/dashboard',
-    icon: <CIcon name="cil-speedometer" customClasses="c-sidebar-nav-icon"/>,
+    icon: <CIcon name='cil-pencil' customClasses="c-sidebar-nav-icon"/>,
     badge: {
       color: 'info',
       text: 'NEW',
@@ -19,7 +19,7 @@ export default [
     _tag: 'CSidebarNavItem',
     name: 'New Product',
     to: '/dashboard/add',
-    icon: <CIcon name="cil-speedometer" customClasses="c-sidebar-nav-icon"/>,
+    icon: <CIcon name='cil-drop' customClasses="c-sidebar-nav-icon"/>,
     badge: {
       color: 'info',
       text: 'NEW',
