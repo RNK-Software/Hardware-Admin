@@ -1,6 +1,5 @@
 import React from 'react';
-import AddFormHardware from '../Components/AddFromHardware.Component';
-import Hardwares from "../Components/Hardwares.Component";
+import AddFormHardware from '../Components/AddFormHardware.Component';
 
 const HardwarePage = (props) => {
     return(

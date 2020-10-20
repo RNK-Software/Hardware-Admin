@@ -302,6 +302,15 @@ function Items() {
         }
     }
 
+    if(products.length == 0){
+        return (
+            <div className="center">
+                <center>
+                    <Spinner animation="border" className="spinner2" alignItems="center" />
+                </center>
+            </div>
+        );
+    }
 
     return (
 

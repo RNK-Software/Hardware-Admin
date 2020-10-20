@@ -64,12 +64,12 @@ function AddFormHardware() {
 
     if(loading){
         return (
-            <React.Fragment>
-                <div className="middle">
-                    <Spinner color="dark" style={{ width: '100', height: '100' }}/>
-                </div>
-            </React.Fragment>
-        )
+            <div className="center">
+                <center>
+                    <Spinner animation="border" className="spinner2" alignItems="center" />
+                </center>
+            </div>
+        );
     }
     return (
         <React.Fragment>
