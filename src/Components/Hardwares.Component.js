@@ -76,7 +76,7 @@ function Hardwares() {
         if (!error) {
             const updatedProduct = {
                 name: name,
-                price: number
+                number: number
             }
             firebase.firestore.collection('hardwares').doc(product.id).set(updatedProduct).then((res) => {
                 setLoading(false);
