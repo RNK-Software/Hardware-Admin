@@ -34,8 +34,7 @@ function Items() {
     const [disableForward, setDisableForward] = useState(false);
     const [disableBackward, setDisableBackward] = useState(false);
     //Let the user set this if you want 
-
-    const itemsPerPage = 20;
+    const [itemsPerPage, setItemsPerPage] = useState(20);
 
     const validate = () => {
         let error = false;
@@ -363,27 +362,27 @@ function Items() {
                 <Table>
                     <tbody>
                         {products.map((data, index) => {
-                            if (searchString === "") {
+                            // if (searchString === "") {
                                 return (
                                     <tr key={data.id}>
                                         <td xs="8" sm="8">{data.name}</td>
                                         <td align="right"><Button onClick={() => { onEdit(data.id) }}>Edit</Button></td>
                                     </tr>
                                 );
-                            }
-                            else {
-                                if (data.name.toLowerCase().includes(searchString.toLowerCase())) {
-                                    return (
-                                        <tr key={data.id}>
-                                            <td xs="8" sm="8">{data.name}</td>
-                                            <td align="right"><Button onClick={() => { onEdit(data.id) }}>Edit</Button></td>
-                                        </tr>
-                                    );
-                                }
-                                else {
-                                    return null;
-                                }
-                            }
+                            // }
+                            // else {
+                            //     if (data.name.toLowerCase().includes(searchString.toLowerCase())) {
+                            //         return (
+                            //             <tr key={data.id}>
+                            //                 <td xs="8" sm="8">{data.name}</td>
+                            //                 <td align="right"><Button onClick={() => { onEdit(data.id) }}>Edit</Button></td>
+                            //             </tr>
+                            //         );
+                            //     }
+                            //     else {
+                            //         return null;
+                            //     }
+                            // }
                         })}
                     </tbody>
                 </Table>
