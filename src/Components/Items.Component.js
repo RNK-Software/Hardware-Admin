@@ -26,6 +26,8 @@ function Items() {
     const [description, setDescription] = useState("");
     const [price, setPrice] = useState("");
     const [picture, setPicture] = useState([]);
+
+    const [done, setDone] = useState(false);
     //for pagination
     const [firstItem, setFirstItem] = useState(null);
     const [lastItem, setLastItem] = useState(null);
@@ -65,8 +67,16 @@ function Items() {
 
     const onDelete = (evt) => {
         evt.preventDefault();
-        console.log("delete fucntion");
-        //delete firebase
+
+        var deleteRef = firebase.storage.ref('products/' + product.pictureName);
+        deleteRef.delete().then(() => {
+            console.log("deleted in delete");
+        }).catch(err => console.log(err));
+
+        firebase.firestore.collection('products').doc(product.id).delete().then(() => {
+            console.log("deleted");
+            setDone(!done);
+        }).catch(err => console.log(err));
     }
 
     // const search = (evt) => {
@@ -91,15 +101,55 @@ function Items() {
     // }
 
     const Edit = (evt) => {
-        console.log("edit fucntion");
-        console.log(name);
-        console.log("w");
-        console.log(description);
         evt.preventDefault();
+        console.log(product);
         const error = validate();
         setLoading(true);
         setAlert(0);
         if (!error) {
+            if (picture) {
+                 //deleting existing picture from storage
+                 var deleteRef = firebase.storage.ref('products/' + product.pictureName);
+                 deleteRef.delete().then(() => {
+                     console.log("deleted in edit");
+                 }).catch(err => console.log(err));
+ 
+                 //uploading the new picture
+                 var addRef = firebase.storage.ref('products/' + picture[0].name);
+                 addRef.put(picture[0]).then((res) => {
+                     res.ref.getDownloadURL().then((url) => {
+                         const updatedProduct = {
+                             name: name,
+                             price: price,
+                             description: description,
+                             pictureUrl: url,
+                             pictureName: picture[0].name
+                         };
+                         firebase.firestore.collection('products').doc(product.id).set(updatedProduct).then(() => {
+                             console.log("Updated with image url");
+                             setLoading(false);
+                             setDone(!done);
+ 
+                         }
+                         ).catch(e => console.log(e));
+                     })
+                 }).catch(err => console.log(err));
+
+            } else {
+                const updatedProduct = {
+                    name: name,
+                    description: description,
+                    pictureUrl: product.pictureUrl,
+                    price: price,
+                    pictureName: product.pictureName
+                }
+                firebase.firestore.collection('products').doc(product.id).set(updatedProduct).then((res) => {
+                    setLoading(false);
+                    console.log("Updating done");
+                    setDone(!done);
+                }).catch(err => console.log(err));
+            }
+
             //Update firebase
 
             // picture.map((pic) => {
@@ -147,7 +197,8 @@ function Items() {
                     name: doc.data().name,
                     description: doc.data().description,
                     price: doc.data().price,
-                    pictureUrl: doc.data().pictureUrl
+                    pictureUrl: doc.data().pictureUrl,
+                    pictureName: doc.data().pictureName
                 });
             });
             if (snapshot.docs.length > 0) {
@@ -157,7 +208,7 @@ function Items() {
 
             }
         });
-    }, [product, itemsPerPage]);
+    }, [product, done, itemsPerPage]);
 
     const togglePaginationForward = () => {
         if (!lastItem) {
