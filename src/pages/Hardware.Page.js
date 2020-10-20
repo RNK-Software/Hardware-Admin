@@ -5,8 +5,7 @@ import Hardwares from "../Components/Hardwares.Component";
 const HardwarePage = (props) => {
     return(
         <React.Fragment>
-        <Hardwares/>
-        <AddFormHardware/>
+            <AddFormHardware/>
         </React.Fragment>
     );
 };

@@ -28,7 +28,7 @@ export default [
   {
     _tag: 'CSidebarNavItem',
     name: 'Hardware List',
-    to: 'dashboard/hardware',
+    to: '/dashboard/hardware',
     icon: <CIcon name='cil-pencil' customClasses="c-sidebar-nav-icon"/>,
     badge: {
       color: 'warning',
