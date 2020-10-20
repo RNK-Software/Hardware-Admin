@@ -35,6 +35,8 @@ function Items() {
     const [disableBackward, setDisableBackward] = useState(false);
     //Let the user set this if you want 
     const [itemsPerPage, setItemsPerPage] = useState(20);
+    //for searching
+    const [allProducts, setAllProducts] = useState(null);
 
     const validate = () => {
         let error = false;
@@ -85,32 +87,32 @@ function Items() {
         setAlert(0);
         if (!error) {
             if (picture) {
-                 //deleting existing picture from storage
-                 var deleteRef = firebase.storage.ref('products/' + product.pictureName);
-                 deleteRef.delete().then(() => {
-                     console.log("deleted in edit");
-                 }).catch(err => console.log(err));
- 
-                 //uploading the new picture
-                 var addRef = firebase.storage.ref('products/' + picture[0].name);
-                 addRef.put(picture[0]).then((res) => {
-                     res.ref.getDownloadURL().then((url) => {
-                         const updatedProduct = {
-                             name: name,
-                             price: price,
-                             description: description,
-                             pictureUrl: url,
-                             pictureName: picture[0].name
-                         };
-                         firebase.firestore.collection('products').doc(product.id).set(updatedProduct).then(() => {
-                             console.log("Updated with image url");
-                             setLoading(false);
-                             setDone(!done);
- 
-                         }
-                         ).catch(e => console.log(e));
-                     })
-                 }).catch(err => console.log(err));
+                //deleting existing picture from storage
+                var deleteRef = firebase.storage.ref('products/' + product.pictureName);
+                deleteRef.delete().then(() => {
+                    console.log("deleted in edit");
+                }).catch(err => console.log(err));
+
+                //uploading the new picture
+                var addRef = firebase.storage.ref('products/' + picture[0].name);
+                addRef.put(picture[0]).then((res) => {
+                    res.ref.getDownloadURL().then((url) => {
+                        const updatedProduct = {
+                            name: name,
+                            price: price,
+                            description: description,
+                            pictureUrl: url,
+                            pictureName: picture[0].name
+                        };
+                        firebase.firestore.collection('products').doc(product.id).set(updatedProduct).then(() => {
+                            console.log("Updated with image url");
+                            setLoading(false);
+                            setDone(!done);
+
+                        }
+                        ).catch(e => console.log(e));
+                    })
+                }).catch(err => console.log(err));
 
             } else {
                 const updatedProduct = {
@@ -167,7 +169,7 @@ function Items() {
         if (!lastItem) {
             return;
         }
-        if(disableBackward)
+        if (disableBackward)
             setDisableBackward(false);
         let data = [];
         const db = firebase.firestore;
@@ -188,11 +190,11 @@ function Items() {
                 });
             });
 
-         
-                setFirstItem(snapshot.docs[0]);
-                setLastItem(snapshot.docs[snapshot.docs.length - 1]);
-                setProducts(data);
-            
+
+            setFirstItem(snapshot.docs[0]);
+            setLastItem(snapshot.docs[snapshot.docs.length - 1]);
+            setProducts(data);
+
 
         });
     };
@@ -201,7 +203,7 @@ function Items() {
         if (!firstItem) {
             return;
         }
-        if(disableForward)
+        if (disableForward)
             setDisableForward(false);
         let data = [];
         const db = firebase.firestore;
@@ -239,6 +241,64 @@ function Items() {
         toggle();
     }
 
+    const onSearch = () => {
+        let data = [];
+        const db = firebase.firestore;
+        if (searchString.length === 0) {
+            db.collection('products').orderBy('name').limit(itemsPerPage).get().then((snapshot) => {
+                snapshot.docs.forEach(doc => {
+                    let items = doc.data();
+                    items = JSON.stringify(items);
+                    data.push({
+                        id: doc.id,
+                        name: doc.data().name,
+                        description: doc.data().description,
+                        price: doc.data().price,
+                        pictureUrl: doc.data().pictureUrl,
+                        pictureName: doc.data().pictureName
+                    });
+                });
+                if (snapshot.docs.length > 0) {
+                    setFirstItem(snapshot.docs[0]);
+                    setLastItem(snapshot.docs[snapshot.docs.length - 1]);
+                    setProducts(data);
+                    setDisableBackward(false);
+                    setDisableForward(false);
+
+                }
+            });
+        } else {
+            if(allProducts) {
+                const filtered = allProducts.filter((product) => product.name.toLowerCase().includes(searchString.toLowerCase()))
+                setProducts(filtered);
+                setDisableBackward(true);
+                setDisableForward(true);
+            } else {
+                db.collection('products').orderBy('name').get().then((snapshot) => {
+                    snapshot.docs.forEach(doc => {
+                        let items = doc.data();
+                        items = JSON.stringify(items);
+                        data.push({
+                            id: doc.id,
+                            name: doc.data().name,
+                            description: doc.data().description,
+                            price: doc.data().price,
+                            pictureUrl: doc.data().pictureUrl,
+                            pictureName: doc.data().pictureName
+                        });
+                    });
+                    const filtered = data.filter((product) => product.name.toLowerCase().includes(searchString.toLowerCase()))
+                    setProducts(filtered);
+                    setDisableBackward(true);
+                    setDisableForward(true);
+                    setAllProducts(data);
+    
+                });
+            }
+            
+        }
+    }
+
 
     return (
 
@@ -247,6 +307,9 @@ function Items() {
                 <Form className="form-inline">
                     <Col style={{ padding: '5px' }}></Col>
                     <Input size="sm" placeholder="search here" onChange={e => setSearchString(e.target.value)} />
+                    <Col style={{ padding: '5px' }}></Col>
+                    <Col style={{ padding: '5px' }}></Col>
+                    <Button onClick={onSearch}>Search</Button>
                     <Col style={{ padding: '5px' }}></Col>
                 </Form>
 
@@ -363,12 +426,12 @@ function Items() {
                     <tbody>
                         {products.map((data, index) => {
                             // if (searchString === "") {
-                                return (
-                                    <tr key={data.id}>
-                                        <td xs="8" sm="8">{data.name}</td>
-                                        <td align="right"><Button onClick={() => { onEdit(data.id) }}>Edit</Button></td>
-                                    </tr>
-                                );
+                            return (
+                                <tr key={data.id}>
+                                    <td xs="8" sm="8">{data.name}</td>
+                                    <td align="right"><Button onClick={() => { onEdit(data.id) }}>Edit</Button></td>
+                                </tr>
+                            );
                             // }
                             // else {
                             //     if (data.name.toLowerCase().includes(searchString.toLowerCase())) {
