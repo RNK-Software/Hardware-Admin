@@ -7,6 +7,7 @@ import TheHeader from "../Components/Header";
 import ProducsPage from "./Products.Page";
 import Dashboard from './Dashboard.Page';
 import HardwarePage from "./Hardware.Page";
+import DashboardHardware from './DashboardHardware.Page';
 
 const LandingPage = (props) => {
   return (
@@ -20,6 +21,7 @@ const LandingPage = (props) => {
                 <Switch>
                   <Route path={props.match.url} exact component={Dashboard}/>
                   <Route path={props.match.url + '/add'} component={ProducsPage}/>
+                  <Route path={props.match.url + '/hardware'} component={DashboardHardware}/>
                   <Route path={props.match.url + '/add-hardware'} component={HardwarePage}/>
                 </Switch>
                 <div className="c-body">{/* <TheContent/> */}</div>

@@ -27,6 +27,16 @@ export default [
   },
   {
     _tag: 'CSidebarNavItem',
+    name: 'Hardware List',
+    to: 'dashboard/hardware',
+    icon: <CIcon name='cil-pencil' customClasses="c-sidebar-nav-icon"/>,
+    badge: {
+      color: 'warning',
+      text: 'LIST',
+    }
+  },
+  {
+    _tag: 'CSidebarNavItem',
     name: 'New Hardware',
     to: '/dashboard/add-hardware',
     icon: <CIcon name='cil-drop' customClasses="c-sidebar-nav-icon"/>,
