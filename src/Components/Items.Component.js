@@ -33,9 +33,8 @@ function Items() {
     const [lastItem, setLastItem] = useState(null);
     const [disableForward, setDisableForward] = useState(false);
     const [disableBackward, setDisableBackward] = useState(false);
-    //
     //Let the user set this if you want 
-    //
+    
     const itemsPerPage = 20;
 
     const validate = () => {
@@ -78,27 +77,6 @@ function Items() {
             setDone(!done);
         }).catch(err => console.log(err));
     }
-
-    // const search = (evt) => {
-    //     evt.preventDefault();
-    //     console.log("search fucntion");
-    //     if(searchString !== ""){
-    //         let temp = products;
-    //         setProducts([]);
-    //         temp.forEach(doc => {
-    //             let items = doc.data();
-    //             items = JSON.stringify(items);
-    //             data.push({
-    //                 id: doc.id,
-    //                 name: doc.data().name,
-    //                 description: doc.data().description,
-    //                 price: doc.data().price,
-    //                 pictureUrl: doc.data().pictureUrl
-    //             });
-    //         });
-    //     }
-    //     //delete firebase
-    // }
 
     const Edit = (evt) => {
         evt.preventDefault();
@@ -149,30 +127,6 @@ function Items() {
                     setDone(!done);
                 }).catch(err => console.log(err));
             }
-
-            //Update firebase
-
-            // picture.map((pic) => {
-            //     var ref = firebase.storage.ref('products/' + pic.name);
-            //     ref.put(pic).then((res) => {
-            //         res.ref.getDownloadURL().then((url) => {
-            //             const obj = {
-            //                 name: name,
-            //                 price: price,
-            //                 description: description,
-            //                 type: "Hardware",
-            //                 pictureUrl: url
-            //             };
-            //             firebase.firestore.collection('products').doc().set(obj).then(() => {
-            //                 console.log("success");
-            //                 setLoading(false);
-
-            //             }
-            //             ).catch(e => console.log(e));
-            //         })
-            //     }).catch(err => console.log(err));
-            // })
-            //console.log(picture);
         }
         else {
             setAlert(1);
@@ -286,15 +240,6 @@ function Items() {
         toggle();
     }
 
-    /*if (products.length == 0) {
-        return (
-            <React.Fragment>
-                <div className="middle">
-                    <Spinner color="dark" style={{ width: '100', height: '100' }} />
-                </div>
-            </React.Fragment>
-        )
-    }*/
 
     return (
 
