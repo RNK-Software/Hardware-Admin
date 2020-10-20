@@ -64,6 +64,8 @@ function Hardwares() {
         firebase.firestore.collection('hardwares').doc(product.id).delete().then(() => {
             console.log("deleted");
             setDone(!done);
+            toggle2();
+            toggle();
         }).catch(err => console.log(err));
     }
 
@@ -83,6 +85,7 @@ function Hardwares() {
                 console.log("Updating done");
                 setDone(!done);
             }).catch(err => console.log(err));
+            toggle();
             
         }
         else {

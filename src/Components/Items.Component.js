@@ -76,6 +76,8 @@ function Items() {
         firebase.firestore.collection('products').doc(product.id).delete().then(() => {
             console.log("deleted");
             setDone(!done);
+            toggle2();
+            toggle();
         }).catch(err => console.log(err));
     }
 
@@ -128,6 +130,7 @@ function Items() {
                     setDone(!done);
                 }).catch(err => console.log(err));
             }
+            toggle();
         }
         else {
             setAlert(1);
