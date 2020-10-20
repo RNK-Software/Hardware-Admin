@@ -34,7 +34,7 @@ function Items() {
     const [disableForward, setDisableForward] = useState(false);
     const [disableBackward, setDisableBackward] = useState(false);
     //Let the user set this if you want 
-    
+
     const itemsPerPage = 20;
 
     const validate = () => {
@@ -244,38 +244,41 @@ function Items() {
     return (
 
         <React.Fragment>
-
             <CSubheader>
-
                 <Form className="form-inline">
                     <Col style={{ padding: '5px' }}></Col>
                     <Input size="sm" placeholder="search here" onChange={e => setSearchString(e.target.value)} />
                     <Col style={{ padding: '5px' }}></Col>
-
-
                 </Form>
 
+                <Pagination aria-label="Page navigation example">
+                    <PaginationItem disabled={disableBackward}>
+                        <PaginationLink onClick={togglePaginationBackward} previous />
+                    </PaginationItem>
+                    <PaginationItem disabled={disableForward}>
+                        <PaginationLink onClick={togglePaginationForward} next />
+                    </PaginationItem>
+                </Pagination>
             </CSubheader>
+
             <Modal isOpen={modal2} toggle={toggle2}>
                 <ModalHeader toggle={toggle2}>Are you sure?</ModalHeader>
-                <ModalBody>
 
+                <ModalBody>
                 </ModalBody>
+
                 <ModalFooter>
                     <Button outline color="danger" onClick={onDelete} block>Yes</Button>
-
                     <Button outline color="dark" onClick={toggle2} block>Cancel</Button>
                 </ModalFooter>
             </Modal>
-
 
             <Modal isOpen={modal} toggle={toggle} size="lg">
                 <ModalHeader toggle={toggle}>Edit your product here</ModalHeader>
                 <ModalBody>
                     <center><img src={product.pictureUrl} alt="image" style={{ width: 200, height: 200 }} /></center>
                     <Row>
-                        <Col xs="12" sm="2">
-                        </Col>
+                        <Col xs="12" sm="2"></Col>
                         <Col xs="12" sm="8">
                             <div className="center2">
                                 <Form id="form" >
@@ -287,6 +290,7 @@ function Items() {
                                             </FormGroup>
                                         </Col>
                                     </Row>
+
                                     <Row>
                                         <Col xs="12" sm="12">
                                             <FormGroup>
@@ -295,6 +299,7 @@ function Items() {
                                             </FormGroup>
                                         </Col>
                                     </Row>
+
                                     <Row>
                                         <Col xs="12" sm="12">
                                             <FormGroup>
@@ -303,6 +308,7 @@ function Items() {
                                             </FormGroup>
                                         </Col>
                                     </Row>
+
                                     <ImageUploader
                                         withIcon={true}
                                         withPreview={true}
@@ -312,6 +318,7 @@ function Items() {
                                         maxFileSize={5242880}
                                         label="Upload a Image here"
                                     />
+
                                     <br />
                                     <Row xs="12" sm="12">
                                         <center>
@@ -320,11 +327,13 @@ function Items() {
                                                 : null}
                                         </center>
                                     </Row>
+
                                     {alert === 1 ?
                                         <Alert color="danger" status={alert}>
                                             {alertMsg}
                                         </Alert>
                                         : null}
+
                                     <Row>
                                         <Col xs="6" sm="6">
 
@@ -333,6 +342,7 @@ function Items() {
 
                                         </Col>
                                     </Row>
+
                                     <br /><br />
                                 </Form>
                             </div>
@@ -341,21 +351,15 @@ function Items() {
                         </Col>
                     </Row>
                 </ModalBody>
+
                 <ModalFooter>
                     <Button outline color="danger" onClick={toggle2} block>Delete</Button>
                     <Button outline color="primary" onClick={Edit} block>Edit</Button>
                     <Button outline color="dark" onClick={toggle} block>Cancel</Button>
                 </ModalFooter>
             </Modal>
+
             <Container>
-                <Pagination aria-label="Page navigation example">
-                    <PaginationItem disabled={disableBackward}>
-                        <PaginationLink onClick={togglePaginationBackward} previous />
-                    </PaginationItem>
-                    <PaginationItem disabled={disableForward}>
-                        <PaginationLink onClick={togglePaginationForward} next />
-                    </PaginationItem>
-                </Pagination>
                 <Table>
                     <tbody>
                         {products.map((data, index) => {
