@@ -11,8 +11,8 @@ export default [
     to: '/dashboard',
     icon: <CIcon name='cil-pencil' customClasses="c-sidebar-nav-icon"/>,
     badge: {
-      color: 'info',
-      text: 'NEW',
+      color: 'warning',
+      text: 'LIST',
     }
   },
   {
@@ -25,7 +25,16 @@ export default [
       text: 'NEW',
     }
   },
-  
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'New Hardware',
+    to: '/dashboard/add-hardware',
+    icon: <CIcon name='cil-drop' customClasses="c-sidebar-nav-icon"/>,
+    badge: {
+      color: 'info',
+      text: 'NEW',
+    }
+  },
   
   /*{
     _tag: 'CSidebarNavTitle',
