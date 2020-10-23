@@ -48,6 +48,7 @@ function AddForm() {
     const reset = (evt) => {
         evt.preventDefault();
         document.getElementById("form").reset();
+        console.log(categories);
     }
 
     const handleSubmit = (evt) => {
@@ -66,6 +67,7 @@ function AddForm() {
                             name: name,
                             price: price,
                             description: description,
+                            category: category,
                             type: "Hardware",
                             pictureUrl: url,
                             pictureName: pic.name
@@ -104,12 +106,12 @@ function AddForm() {
             });
             if (snapshot.docs.length > 0) {
                 setCategories(data);
-                setLoading(false);
+                setLoading(false);              
             }
         });
     }, []);
 
-    if(loading){
+    if(loading || categories.length==0){
         return (
             <div className="center">
                 <center>
@@ -152,7 +154,7 @@ function AddForm() {
                                             <Input type="select" name="category" id="category" onChange={e => setCategory(e.target.value)} >
                                                 {categories.map((data, index) => {
                                                     return (
-                                                        <option>{data.name}</option>
+                                                        <option value={data.id}>{data.name}</option>
                                                     );
                                                 })}
                                             </Input>
