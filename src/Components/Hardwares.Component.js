@@ -372,27 +372,12 @@ function Hardwares() {
                 <Table>
                     <tbody>
                         {products.map((data, index) => {
-                            // if (searchString === "") {
                             return (
                                 <tr key={data.id}>
                                     <td xs="8" sm="8">{data.name}</td>
                                     <td align="right"><Button onClick={() => { onEdit(data.id) }}>Edit</Button></td>
                                 </tr>
                             );
-                            // }
-                            // else {
-                            //     if (data.name.toLowerCase().includes(searchString.toLowerCase())) {
-                            //         return (
-                            //             <tr key={data.id}>
-                            //                 <td xs="8" sm="8">{data.name}</td>
-                            //                 <td align="right"><Button onClick={() => { onEdit(data.id) }}>Edit</Button></td>
-                            //             </tr>
-                            //         );
-                            //     }
-                            //     else {
-                            //         return null;
-                            //     }
-                            // }
                         })}
                     </tbody>
                 </Table>
