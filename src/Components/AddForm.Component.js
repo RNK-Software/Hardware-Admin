@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Spinner, Row, Col, Alert, Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import ImageUploader from 'react-images-upload';
 import * as firebase from '../utilities/firebase';
 
 function AddForm() {
-
+    const [categories, setCategories] = useState([]);
+    const [category, setCategory] = useState([]);
     const [loading, setLoading] = useState(false);
     const [alert, setAlert] = useState(0);
     const [alertMsg, setAlertMsg] = useState("");
@@ -47,6 +48,7 @@ function AddForm() {
     const reset = (evt) => {
         evt.preventDefault();
         document.getElementById("form").reset();
+        console.log(categories);
     }
 
     const handleSubmit = (evt) => {
@@ -65,6 +67,7 @@ function AddForm() {
                             name: name,
                             price: price,
                             description: description,
+                            category: category,
                             type: "Hardware",
                             pictureUrl: url,
                             pictureName: pic.name
@@ -86,7 +89,29 @@ function AddForm() {
         }
     }
 
-    if(loading){
+    useEffect(() => {
+        // setName(product.name);
+        // setNumber(product.number);
+        setLoading(true);
+        let data = [];
+        const db = firebase.firestore;
+        db.collection('categories').orderBy('name').get().then((snapshot) => {
+            snapshot.docs.forEach(doc => {
+                let items = doc.data();
+                items = JSON.stringify(items);
+                data.push({
+                    id: doc.id,
+                    name: doc.data().name
+                });
+            });
+            if (snapshot.docs.length > 0) {
+                setCategories(data);
+                setLoading(false);              
+            }
+        });
+    }, []);
+
+    if(loading || categories.length==0){
         return (
             <div className="center">
                 <center>
@@ -121,6 +146,22 @@ function AddForm() {
                                         </FormGroup>
                                     </Col>
                                 </Row>
+
+                                <Row>
+                                    <Col xs="12" sm="12">
+                                        <FormGroup>
+                                            <Label for="name">ITEM CATEGORY</Label>
+                                            <Input type="select" name="category" id="category" onChange={e => setCategory(e.target.value)} >
+                                                {categories.map((data, index) => {
+                                                    return (
+                                                        <option value={data.id}>{data.name}</option>
+                                                    );
+                                                })}
+                                            </Input>
+                                        </FormGroup>
+                                    </Col>
+                                </Row>
+
                                 <Row>
                                     <Col xs="12" sm="12">
                                         <FormGroup>

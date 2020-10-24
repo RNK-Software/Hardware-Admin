@@ -13,9 +13,7 @@ import {
     CLink
 } from '@coreui/react';
 
-import Map from './Map.Component';
-
-function Hardwares() {
+function Category() {
     const [products, setProducts] = useState([]);
     const [modal, setModal] = useState(false);
     const [modal2, setModal2] = useState(false);
@@ -25,7 +23,6 @@ function Hardwares() {
     const [alert, setAlert] = useState(0);
     const [alertMsg, setAlertMsg] = useState("");
     const [name, setName] = useState("");
-    const [number, setNumber] = useState("");
 
     const [done, setDone] = useState(false);
     //for pagination
@@ -45,25 +42,13 @@ function Hardwares() {
             error = true;
             alertMsg = "Name can not be empty";
         }
-        else if (number < 0) {
-            error = true;
-            alertMsg = "Please enter a valid mobile number";
-        }
-        else if (number.length !== 10) {
-            error = true;
-            alertMsg = "Please enter a valid mobile number";
-        }
-        else if (number[0] !== "0") {
-            error = true;
-            alertMsg = "Please enter a valid mobile number";
-        }
         setAlertMsg(alertMsg);
         return error;
     }
 
     const onDelete = (evt) => {
         evt.preventDefault();
-        firebase.firestore.collection('hardwares').doc(product.id).delete().then(() => {
+        firebase.firestore.collection('categories').doc(product.id).delete().then(() => {
             console.log("deleted");
             setDone(!done);
             toggle2();
@@ -79,16 +64,14 @@ function Hardwares() {
         setAlert(0);
         if (!error) {
             const updatedProduct = {
-                name: name,
-                number: number
+                name: name
             }
-            firebase.firestore.collection('hardwares').doc(product.id).set(updatedProduct).then((res) => {
+            firebase.firestore.collection('categories').doc(product.id).set(updatedProduct).then((res) => {
                 setLoading(false);
                 console.log("Updating done");
                 setDone(!done);
             }).catch(err => console.log(err));
-            toggle();
-
+            toggle();    
         }
         else {
             setAlert(1);
@@ -98,27 +81,22 @@ function Hardwares() {
 
     useEffect(() => {
         setName(product.name);
-        setNumber(product.number);
 
         let data = [];
         const db = firebase.firestore;
-        db.collection('hardwares').orderBy('name').limit(itemsPerPage).get().then((snapshot) => {
+        db.collection('categories').orderBy('name').limit(itemsPerPage).get().then((snapshot) => {
             snapshot.docs.forEach(doc => {
                 let items = doc.data();
                 items = JSON.stringify(items);
                 data.push({
                     id: doc.id,
-                    name: doc.data().name,
-                    number: doc.data().number,
-                    lat: doc.data().lat,
-                    lng: doc.data().lng
+                    name: doc.data().name
                 });
             });
             if (snapshot.docs.length > 0) {
                 setFirstItem(snapshot.docs[0]);
                 setLastItem(snapshot.docs[snapshot.docs.length - 1]);
                 setProducts(data);
-
             }
         });
     }, [product, done, itemsPerPage]);
@@ -131,7 +109,7 @@ function Hardwares() {
             setDisableBackward(false);
         let data = [];
         const db = firebase.firestore;
-        db.collection('hardwares').orderBy('name').startAfter(lastItem).limit(itemsPerPage).get().then((snapshot) => {
+        db.collection('categories').orderBy('name').startAfter(lastItem).limit(itemsPerPage).get().then((snapshot) => {
             if (snapshot.docs.length === 0) {
                 setDisableForward(true);
                 return;
@@ -142,9 +120,6 @@ function Hardwares() {
                 data.push({
                     id: doc.id,
                     name: doc.data().name,
-                    number: doc.data().number,
-                    lat: doc.data().lat,
-                    lng: doc.data().lng
                 });
             });
 
@@ -164,7 +139,7 @@ function Hardwares() {
             setDisableForward(false);
         let data = [];
         const db = firebase.firestore;
-        db.collection('hardwares').orderBy('name').endBefore(firstItem).limit(itemsPerPage).get().then((snapshot) => {
+        db.collection('categories').orderBy('name').endBefore(firstItem).limit(itemsPerPage).get().then((snapshot) => {
             if (snapshot.docs.length === 0) {
                 setDisableBackward(true);
                 return;
@@ -175,7 +150,6 @@ function Hardwares() {
                 data.push({
                     id: doc.id,
                     name: doc.data().name,
-                    number: doc.data().number,
                 });
             });
             console.log(data);
@@ -198,16 +172,13 @@ function Hardwares() {
         let data = [];
         const db = firebase.firestore;
         if (searchString.length === 0) {
-            db.collection('hardwares').orderBy('name').limit(itemsPerPage).get().then((snapshot) => {
+            db.collection('categories').orderBy('name').limit(itemsPerPage).get().then((snapshot) => {
                 snapshot.docs.forEach(doc => {
                     let items = doc.data();
                     items = JSON.stringify(items);
                     data.push({
                         id: doc.id,
                         name: doc.data().name,
-                        number: doc.data().number,
-                        lat: doc.data().lat,
-                        lng: doc.data().lng
                     });
                 });
                 if (snapshot.docs.length > 0) {
@@ -219,22 +190,19 @@ function Hardwares() {
                 }
             });
         } else {
-            if (allProducts) {
+            if(allProducts) {
                 const filtered = allProducts.filter((product) => product.name.toLowerCase().includes(searchString.toLowerCase()))
                 setProducts(filtered);
                 setDisableBackward(true);
                 setDisableForward(true);
             } else {
-                db.collection('hardwares').orderBy('name').get().then((snapshot) => {
+                db.collection('categories').orderBy('name').get().then((snapshot) => {
                     snapshot.docs.forEach(doc => {
                         let items = doc.data();
                         items = JSON.stringify(items);
                         data.push({
                             id: doc.id,
                             name: doc.data().name,
-                            number: doc.data().number,
-                            lat: doc.data().lat,
-                            lng: doc.data().lng
                         });
                     });
                     const filtered = data.filter((product) => product.name.toLowerCase().includes(searchString.toLowerCase()))
@@ -242,14 +210,14 @@ function Hardwares() {
                     setDisableBackward(true);
                     setDisableForward(true);
                     setAllProducts(data);
-
+    
                 });
             }
-
+            
         }
     }
 
-    if (products.length == 0) {
+    if(products.length == 0){
         return (
             <div className="center">
                 <center>
@@ -258,33 +226,31 @@ function Hardwares() {
             </div>
         );
     }
-
+    
     return (
 
         <React.Fragment>
             <CSubheader>
-                <Map markers={products} height="400px" lat={6.986493} lan={79.912215} />
-
-
+                
                 <Form className="form-inline">
                     <Row>
                         <Pagination >
-
+                            
                             <Col style={{ padding: '5px' }}></Col>
-                            <PaginationItem disabled={disableBackward}>
-                                <PaginationLink onClick={togglePaginationBackward} previous />
-                            </PaginationItem>
-                            <Input type="select" name="select" id="exampleSelect" onChange={e => setItemsPerPage(parseInt(e.target.value))}>
-                                <option>5</option>
-                                <option>10</option>
-                                <option>20</option>
-                                <option>30</option>
-                                <option>50</option>
-                            </Input>
-                            <PaginationItem disabled={disableForward}>
-                                <PaginationLink onClick={togglePaginationForward} next />
-                            </PaginationItem>
-                        </Pagination>
+                                <PaginationItem disabled={disableBackward}>
+                                    <PaginationLink onClick={togglePaginationBackward} previous />
+                                </PaginationItem>
+                                <Input type="select" name="select" id="exampleSelect" onChange={e => setItemsPerPage(parseInt(e.target.value))}>
+                                    <option>5</option>
+                                    <option>10</option>
+                                    <option>20</option>
+                                    <option>30</option>
+                                    <option>50</option>
+                                </Input>
+                                <PaginationItem disabled={disableForward}>
+                                    <PaginationLink onClick={togglePaginationForward} next />
+                                </PaginationItem> 
+                            </Pagination>
                         <Col style={{ padding: '15px' }}></Col>
                     </Row>
 
@@ -294,13 +260,13 @@ function Hardwares() {
                     <Col style={{ padding: '5px' }}></Col>
                     <Button size="sm" onClick={onSearch}>Search</Button>
                     <Col style={{ padding: '10px' }}></Col>
-
-
+                  
+               
                 </Form>
-
-
+               
+                
             </CSubheader>
-
+            
             <Modal isOpen={modal2} toggle={toggle2}>
                 <ModalHeader toggle={toggle2}>Are you sure?</ModalHeader>
 
@@ -316,7 +282,7 @@ function Hardwares() {
             <Modal isOpen={modal} toggle={toggle} size="lg">
                 <ModalHeader toggle={toggle}>Edit your product here</ModalHeader>
                 <ModalBody>
-                    <br />
+                    <br/>
                     <Row>
                         <Col xs="12" sm="2"></Col>
                         <Col xs="12" sm="8">
@@ -325,17 +291,8 @@ function Hardwares() {
                                     <Row>
                                         <Col xs="12" sm="12">
                                             <FormGroup>
-                                                <Label for="name">HARDWARE NAME</Label>
+                                                <Label for="name">CATEGORY NAME</Label>
                                                 <Input type="text" name="name" id="name" value={name} onChange={e => setName(e.target.value)} />
-                                            </FormGroup>
-                                        </Col>
-                                    </Row>
-
-                                    <Row>
-                                        <Col xs="12" sm="12">
-                                            <FormGroup>
-                                                <Label for="name">CONTACT NUMBER</Label>
-                                                <Input type="number" name="name" id="name" value={number} placeholder="Input the contact number here (ex: 0713456789)" onChange={e => setNumber(e.target.value)} />
                                             </FormGroup>
                                         </Col>
                                     </Row>
@@ -384,19 +341,34 @@ function Hardwares() {
                 <Table>
                     <tbody>
                         {products.map((data, index) => {
+                            // if (searchString === "") {
                             return (
                                 <tr key={data.id}>
                                     <td xs="8" sm="8">{data.name}</td>
                                     <td align="right"><Button onClick={() => { onEdit(data.id) }}>Edit</Button></td>
                                 </tr>
                             );
+                            // }
+                            // else {
+                            //     if (data.name.toLowerCase().includes(searchString.toLowerCase())) {
+                            //         return (
+                            //             <tr key={data.id}>
+                            //                 <td xs="8" sm="8">{data.name}</td>
+                            //                 <td align="right"><Button onClick={() => { onEdit(data.id) }}>Edit</Button></td>
+                            //             </tr>
+                            //         );
+                            //     }
+                            //     else {
+                            //         return null;
+                            //     }
+                            // }
                         })}
                     </tbody>
                 </Table>
             </Container>
-
+            
         </React.Fragment>
     );
 }
 
-export default Hardwares;
+export default Category;

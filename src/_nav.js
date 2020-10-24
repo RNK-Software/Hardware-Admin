@@ -7,6 +7,16 @@ import { Button } from 'reactstrap';
 export default [
   {
     _tag: 'CSidebarNavItem',
+    name: 'Category List',
+    to: '/dashboard/category',
+    icon: <CIcon name='cil-drop' customClasses="c-sidebar-nav-icon"/>,
+    badge: {
+      color: 'info',
+      text: 'NEW',
+    }
+  },
+  {
+    _tag: 'CSidebarNavItem',
     name: 'Product List',
     to: '/dashboard',
     icon: <CIcon name='cil-pencil' customClasses="c-sidebar-nav-icon"/>,

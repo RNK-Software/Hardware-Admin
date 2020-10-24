@@ -8,6 +8,7 @@ import ProducsPage from "./Products.Page";
 import Dashboard from './Dashboard.Page';
 import HardwarePage from "./Hardware.Page";
 import DashboardHardware from './DashboardHardware.Page';
+import CategoryPage from "./Category.Page";
 
 const LandingPage = (props) => {
   return (
@@ -23,6 +24,7 @@ const LandingPage = (props) => {
                   <Route path={props.match.url + '/add'} component={ProducsPage}/>
                   <Route path={props.match.url + '/hardware'} component={DashboardHardware}/>
                   <Route path={props.match.url + '/add-hardware'} component={HardwarePage}/>
+                  <Route path={props.match.url + '/category'} component={CategoryPage}/>
                 </Switch>
                 <div className="c-body">{/* <TheContent/> */}</div>
                 {/* <TheFooter/> */}
