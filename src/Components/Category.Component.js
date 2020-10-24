@@ -71,6 +71,14 @@ function Category() {
                 console.log("Updating done");
                 setDone(!done);
             }).catch(err => console.log(err));
+
+            firebase.firestore.collection('products').where('category.id', '==', product.id).get().then(ps => {
+                ps.forEach(doc => {
+                    firebase.firestore.collection('products').doc(doc.id).update({
+                        "category.name" : name
+                    })
+                })
+            })
             toggle();    
         }
         else {

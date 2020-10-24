@@ -104,7 +104,8 @@ function Items() {
                             price: price,
                             description: description,
                             pictureUrl: url,
-                            pictureName: picture[0].name
+                            pictureName: picture[0].name,
+                            category: product.category
                         };
                         firebase.firestore.collection('products').doc(product.id).set(updatedProduct).then(() => {
                             console.log("Updated with image url");
@@ -122,7 +123,8 @@ function Items() {
                     description: description,
                     pictureUrl: product.pictureUrl,
                     price: price,
-                    pictureName: product.pictureName
+                    pictureName: product.pictureName,
+                    category: product.category
                 }
                 firebase.firestore.collection('products').doc(product.id).set(updatedProduct).then((res) => {
                     setLoading(false);
@@ -156,7 +158,8 @@ function Items() {
                     description: doc.data().description,
                     price: doc.data().price,
                     pictureUrl: doc.data().pictureUrl,
-                    pictureName: doc.data().pictureName
+                    pictureName: doc.data().pictureName,
+                    category: doc.data().category.name
                 });
             });
             if (snapshot.docs.length > 0) {
@@ -189,7 +192,8 @@ function Items() {
                     name: doc.data().name,
                     description: doc.data().description,
                     price: doc.data().price,
-                    pictureUrl: doc.data().pictureUrl
+                    pictureUrl: doc.data().pictureUrl,
+                    category: doc.data().category.name
                 });
             });
 
@@ -223,7 +227,8 @@ function Items() {
                     name: doc.data().name,
                     description: doc.data().description,
                     price: doc.data().price,
-                    pictureUrl: doc.data().pictureUrl
+                    pictureUrl: doc.data().pictureUrl,
+                    category: doc.data().category.name
                 });
             });
             console.log(data);
@@ -258,7 +263,8 @@ function Items() {
                         description: doc.data().description,
                         price: doc.data().price,
                         pictureUrl: doc.data().pictureUrl,
-                        pictureName: doc.data().pictureName
+                        pictureName: doc.data().pictureName,
+                        category: doc.data().category.name
                     });
                 });
                 if (snapshot.docs.length > 0) {
@@ -287,7 +293,8 @@ function Items() {
                             description: doc.data().description,
                             price: doc.data().price,
                             pictureUrl: doc.data().pictureUrl,
-                            pictureName: doc.data().pictureName
+                            pictureName: doc.data().pictureName,
+                            category: doc.data().category.name
                         });
                     });
                     const filtered = data.filter((product) => product.name.toLowerCase().includes(searchString.toLowerCase()))
@@ -458,6 +465,8 @@ function Items() {
                             return (
                                 <tr key={data.id}>
                                     <td xs="8" sm="8">{data.name}</td>
+                                    <td xs="8" sm="8">{data.price}</td>
+                                    <td xs="8" sm="8">{data.category}</td>
                                     <td align="right"><Button onClick={() => { onEdit(data.id) }}>Edit</Button></td>
                                 </tr>
                             );
