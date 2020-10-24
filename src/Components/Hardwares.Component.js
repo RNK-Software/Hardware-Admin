@@ -13,6 +13,8 @@ import {
     CLink
 } from '@coreui/react';
 
+import Map from './Map.Component';
+
 function Hardwares() {
     const [products, setProducts] = useState([]);
     const [modal, setModal] = useState(false);
@@ -86,7 +88,7 @@ function Hardwares() {
                 setDone(!done);
             }).catch(err => console.log(err));
             toggle();
-            
+
         }
         else {
             setAlert(1);
@@ -107,7 +109,9 @@ function Hardwares() {
                 data.push({
                     id: doc.id,
                     name: doc.data().name,
-                    number: doc.data().number
+                    number: doc.data().number,
+                    lat: doc.data().lat,
+                    lng: doc.data().lng
                 });
             });
             if (snapshot.docs.length > 0) {
@@ -138,7 +142,9 @@ function Hardwares() {
                 data.push({
                     id: doc.id,
                     name: doc.data().name,
-                    number: doc.data().number
+                    number: doc.data().number,
+                    lat: doc.data().lat,
+                    lng: doc.data().lng
                 });
             });
 
@@ -200,6 +206,8 @@ function Hardwares() {
                         id: doc.id,
                         name: doc.data().name,
                         number: doc.data().number,
+                        lat: doc.data().lat,
+                        lng: doc.data().lng
                     });
                 });
                 if (snapshot.docs.length > 0) {
@@ -211,7 +219,7 @@ function Hardwares() {
                 }
             });
         } else {
-            if(allProducts) {
+            if (allProducts) {
                 const filtered = allProducts.filter((product) => product.name.toLowerCase().includes(searchString.toLowerCase()))
                 setProducts(filtered);
                 setDisableBackward(true);
@@ -225,6 +233,8 @@ function Hardwares() {
                             id: doc.id,
                             name: doc.data().name,
                             number: doc.data().number,
+                            lat: doc.data().lat,
+                            lng: doc.data().lng
                         });
                     });
                     const filtered = data.filter((product) => product.name.toLowerCase().includes(searchString.toLowerCase()))
@@ -232,14 +242,14 @@ function Hardwares() {
                     setDisableBackward(true);
                     setDisableForward(true);
                     setAllProducts(data);
-    
+
                 });
             }
-            
+
         }
     }
 
-    if(products.length == 0){
+    if (products.length == 0) {
         return (
             <div className="center">
                 <center>
@@ -248,31 +258,33 @@ function Hardwares() {
             </div>
         );
     }
-    
+
     return (
 
         <React.Fragment>
             <CSubheader>
-                
+                <Map markers={products} height="400px" lat={6.986493} lan={79.912215} />
+
+
                 <Form className="form-inline">
                     <Row>
                         <Pagination >
-                            
+
                             <Col style={{ padding: '5px' }}></Col>
-                                <PaginationItem disabled={disableBackward}>
-                                    <PaginationLink onClick={togglePaginationBackward} previous />
-                                </PaginationItem>
-                                <Input type="select" name="select" id="exampleSelect" onChange={e => setItemsPerPage(parseInt(e.target.value))}>
-                                    <option>5</option>
-                                    <option>10</option>
-                                    <option>20</option>
-                                    <option>30</option>
-                                    <option>50</option>
-                                </Input>
-                                <PaginationItem disabled={disableForward}>
-                                    <PaginationLink onClick={togglePaginationForward} next />
-                                </PaginationItem> 
-                            </Pagination>
+                            <PaginationItem disabled={disableBackward}>
+                                <PaginationLink onClick={togglePaginationBackward} previous />
+                            </PaginationItem>
+                            <Input type="select" name="select" id="exampleSelect" onChange={e => setItemsPerPage(parseInt(e.target.value))}>
+                                <option>5</option>
+                                <option>10</option>
+                                <option>20</option>
+                                <option>30</option>
+                                <option>50</option>
+                            </Input>
+                            <PaginationItem disabled={disableForward}>
+                                <PaginationLink onClick={togglePaginationForward} next />
+                            </PaginationItem>
+                        </Pagination>
                         <Col style={{ padding: '15px' }}></Col>
                     </Row>
 
@@ -282,13 +294,13 @@ function Hardwares() {
                     <Col style={{ padding: '5px' }}></Col>
                     <Button size="sm" onClick={onSearch}>Search</Button>
                     <Col style={{ padding: '10px' }}></Col>
-                  
-               
+
+
                 </Form>
-               
-                
+
+
             </CSubheader>
-            
+
             <Modal isOpen={modal2} toggle={toggle2}>
                 <ModalHeader toggle={toggle2}>Are you sure?</ModalHeader>
 
@@ -304,7 +316,7 @@ function Hardwares() {
             <Modal isOpen={modal} toggle={toggle} size="lg">
                 <ModalHeader toggle={toggle}>Edit your product here</ModalHeader>
                 <ModalBody>
-                    <br/>
+                    <br />
                     <Row>
                         <Col xs="12" sm="2"></Col>
                         <Col xs="12" sm="8">
@@ -397,7 +409,7 @@ function Hardwares() {
                     </tbody>
                 </Table>
             </Container>
-            
+
         </React.Fragment>
     );
 }

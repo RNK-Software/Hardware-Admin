@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import { useStore } from "react-redux";
 import { Container, Spinner, Row, Col, Alert, Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import * as firebase from '../utilities/firebase';
+import Map from "./Map.Component";
 
 function AddFormHardware() {
 
@@ -9,6 +11,7 @@ function AddFormHardware() {
     const [alertMsg, setAlertMsg] = useState("");
     const [name, setName] = useState("");
     const [number, setNumber] = useState("");
+    const [marker, setMarker] = useState(null);
 
     const validate = () => {
         let error = false;
@@ -29,6 +32,10 @@ function AddFormHardware() {
             error = true;
             alertMsg = "Please enter a valid mobile number";
         }
+        else if (!marker) {
+            error =true;
+            alertMsg ="Please select a location";
+        }
         setAlertMsg(alertMsg);
         return error;
     }
@@ -36,7 +43,7 @@ function AddFormHardware() {
     const reset = (evt) => {
         evt.preventDefault();
         document.getElementById("form").reset();
-    }
+    };
 
     const handleSubmit = (evt) => {
         evt.preventDefault();
@@ -47,6 +54,8 @@ function AddFormHardware() {
             const obj = {
                 name: name,
                 number: number,
+                lat: marker.lat,
+                lng: marker.lng,
                 type: "Hardware"
             };
             firebase.firestore.collection('hardwares').doc().set(obj).then(() => {
@@ -71,6 +80,18 @@ function AddFormHardware() {
             </div>
         );
     }
+
+    const handleMapClick = (event) => {
+        //console.log(event);
+        const newMarker = {
+            lat : event.latLng.lat(),
+            lng: event.latLng.lng()
+        };
+        console.log(newMarker);
+
+        setMarker(newMarker);
+    };
+
     return (
         <React.Fragment>
             <Container>
@@ -98,6 +119,9 @@ function AddFormHardware() {
                                         </FormGroup>
                                     </Col>
                                 </Row>
+                                
+                                       <Map markers={marker} onClick={handleMapClick} width={"300px"} height={"400px"} lat={6.986493} lan={79.912215}/>
+                                
 
                                 {alert === 1 ?
                                     <Alert color="danger" status={alert}>

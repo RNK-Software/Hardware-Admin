@@ -1,12 +1,20 @@
 import React from 'react';
+
 import Hardwares from "../Components/Hardwares.Component";
 
+
+
 const Dashboard = (props) => {
-    return(
+
+    const handleMapClick = (event) => {
+        console.log(event.latLng.lat());
+    }
+    
+    return (
         <React.Fragment>
-            <Hardwares/>
+            <Hardwares />
         </React.Fragment>
-        
+
     );
 };
 
