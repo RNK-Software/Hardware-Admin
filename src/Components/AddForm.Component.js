@@ -67,7 +67,7 @@ function AddForm() {
                             name: name,
                             price: price,
                             description: description,
-                            category: category,
+                            category: category.name,
                             type: "Hardware",
                             pictureUrl: url,
                             pictureName: pic.name

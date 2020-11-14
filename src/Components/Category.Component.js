@@ -23,7 +23,7 @@ function Category() {
     const [alert, setAlert] = useState(0);
     const [alertMsg, setAlertMsg] = useState("");
     const [name, setName] = useState("");
-
+    const [nameBeforeEditing, setNameBeforeEditing] = useState("");
     const [done, setDone] = useState(false);
     //for pagination
     const [firstItem, setFirstItem] = useState(null);
@@ -72,10 +72,10 @@ function Category() {
                 setDone(!done);
             }).catch(err => console.log(err));
 
-            firebase.firestore.collection('products').where('category.id', '==', product.id).get().then(ps => {
+            firebase.firestore.collection('products').where('category', '==', nameBeforeEditing).get().then(ps => {
                 ps.forEach(doc => {
                     firebase.firestore.collection('products').doc(doc.id).update({
-                        "category.name" : name
+                        "category" : name
                     })
                 })
             })
@@ -89,6 +89,8 @@ function Category() {
 
     useEffect(() => {
         setName(product.name);
+        setNameBeforeEditing(product.name);
+
 
         let data = [];
         const db = firebase.firestore;

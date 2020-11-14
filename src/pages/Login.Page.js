@@ -160,7 +160,7 @@ export default class Login extends Component {
                       <Input
                         type="text"
                         name="Email"
-                        placeholder="Contact Number"
+                        placeholder="Email"
                         id="number"
                         onChange={this.onChange}
                       />
